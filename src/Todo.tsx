@@ -6,14 +6,14 @@ interface ITodo {
         id: string,
         title: string
     },
-    key: string
+    key?: string
 
 
 }
 
 export const Todo: FC<ITodo> = ({ todo,key }) => {
     return (
-        <View style={styles.todo} key={todo.id}>
+        <View style={styles.todo} >
             <Text>
                 {todo.id}
             </Text>
