@@ -1,26 +1,34 @@
 import React, { FC } from "react";
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native'
 
 interface ITodo {
     todo: {
         id: string,
         title: string
     },
-    key?: string
+    key?: string,
+    onRemove: (elemRemoteId:string) => void
 
 
 }
 
-export const Todo: FC<ITodo> = ({ todo,key }) => {
+export const Todo: FC<ITodo> = ({ todo, onRemove }) => {
     return (
-        <View style={styles.todo} >
-            <Text>
-                {todo.id}
-            </Text>
-            <Text>
-                {todo.title}
-            </Text>
-        </View>
+        <TouchableOpacity
+            onPress={ () => Alert.alert(todo.id)}
+            onLongPress={() => onRemove(todo.id)}
+            
+            activeOpacity={0.5}
+        >
+            <View style={styles.todo} >
+                <Text>
+                    {todo.id}
+                </Text>
+                <Text>
+                    {todo.title}
+                </Text>
+            </View>
+        </TouchableOpacity>
     )
 }
 

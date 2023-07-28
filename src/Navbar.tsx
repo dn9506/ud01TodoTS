@@ -2,7 +2,7 @@ import React,{FC, ReactNode} from "react"
 import { StyleSheet, Text, View } from "react-native"
 
 interface INavbar {
-    title: string
+    title?: string
 }
 
 export const Navbar:FC<INavbar> = title => {
