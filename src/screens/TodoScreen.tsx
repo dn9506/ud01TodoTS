@@ -3,7 +3,7 @@ import { Button, StyleSheet, View, Text } from "react-native";
 import { Navbar } from "../Navbar";
 
 
-export const TodoScreen = () => {
+export const TodoScreen = props => {
     return (
         <View>
             <Navbar />
