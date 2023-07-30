@@ -1,5 +1,6 @@
 import React, { FC, useState } from "react";
 import { View, StyleSheet, TextInput, Button, Alert } from "react-native";
+import { THEME } from "../theme";
 
 interface IAddTodo {
     add: (title: string) => void
@@ -50,6 +51,6 @@ const styles = StyleSheet.create({
         padding: 10,
         borderStyle: 'solid',
         borderBottomWidth: 2,
-        borderBottomColor: '#3949ab'
+        borderBottomColor: THEME.MAIN_COLOR
     }
 })

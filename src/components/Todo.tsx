@@ -7,23 +7,20 @@ interface ITodo {
         title: string
     },
     key?: string,
-    onRemove: (elemRemoteId:string) => void
-
+    onRemove: (elemRemoteId: string) => void,
+    onOpen: (elemOpenTodo: string) => void
 
 }
 
-export const Todo: FC<ITodo> = ({ todo, onRemove }) => {
+export const Todo: FC<ITodo> = ({ todo, onRemove, onOpen }) => {
     return (
         <TouchableOpacity
-            onPress={ () => Alert.alert(todo.id)}
+            onPress={() => onOpen(todo.id)}
             onLongPress={() => onRemove(todo.id)}
-            
+
             activeOpacity={0.5}
         >
             <View style={styles.todo} >
-                <Text>
-                    {todo.id}
-                </Text>
                 <Text>
                     {todo.title}
                 </Text>

@@ -1,29 +1,49 @@
-import React from "react";
+import React, { FC } from "react";
 import { Button, StyleSheet, View, Text } from "react-native";
-import { Navbar } from "../Navbar";
 
+import { THEME } from "../theme";
 
-export const TodoScreen = props => {
+interface ITodoScreen {
+    todo: { id: string, title: string }
+    goBack: () => void
+}
+
+export const TodoScreen: FC<ITodoScreen> = ({ goBack, todo }) => {
     return (
         <View>
-            <Navbar />
-            <View>
+            <AppCart>
                 <Text>
-
+                    {todo.title}
                 </Text>
                 <Button title="Edit" />
-            </View>
-            <View>
+            </AppCart>
+            <View style={styles.buttonsBlock}>
+                <View style={styles.button}>
 
-                <Button title="Back" />
-                <Button title="Remove" />
+                    <Button title="Back"
+                        onPress={goBack}
+                        color={THEME.GREY_COLOR}
+                    />
+                </View>
+                <View style={styles.button}>
+
+                    <Button title="Remove"
+                        color={THEME.DANGER_COLOR}
+                    />
+                </View>
             </View>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    todoScreenBlock: {
+    
+    buttonsBlock: {
+        flexDirection: "row",
+        justifyContent: "space-around",
 
+    },
+    button: {
+        width: '40%'
     }
 })

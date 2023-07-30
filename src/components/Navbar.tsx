@@ -1,5 +1,6 @@
 import React,{FC, ReactNode} from "react"
 import { StyleSheet, Text, View } from "react-native"
+import { THEME } from "../theme"
 
 interface INavbar {
     title?: string
@@ -18,7 +19,7 @@ const styles = StyleSheet.create({
         height: 70,
         alignItems: 'center',
         justifyContent: 'flex-end',
-        backgroundColor: '#3949ab',
+        backgroundColor: THEME.MAIN_COLOR,
         paddingBottom: 10
 
     },
