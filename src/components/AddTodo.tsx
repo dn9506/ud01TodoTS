@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, {  useState } from "react";
 import { View, StyleSheet, TextInput, Button, Alert } from "react-native";
 import { THEME } from "../theme";
 
@@ -6,7 +6,7 @@ interface IAddTodo {
     add: (title: string) => void
 }
 
-export const AddTodo: FC<IAddTodo> = ({ add }) => {
+export const AddTodo = ({ add }:IAddTodo) => {
 
 
     const [value, setValue] = useState('')

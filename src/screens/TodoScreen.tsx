@@ -1,21 +1,39 @@
-import React, { FC } from "react";
+import React, { useState } from "react";
 import { Button, StyleSheet, View, Text } from "react-native";
-
+import { AppCart } from '../components/ui/AppCard'
 import { THEME } from "../theme";
+import { EditModal } from "../components/EditModal";
 
 interface ITodoScreen {
     todo: { id: string, title: string }
-    goBack: () => void
+    goBack: () => void,
+    onRemove: (id: string) => void,
+    onSave: (id: string, title: string) => void
 }
 
-export const TodoScreen: FC<ITodoScreen> = ({ goBack, todo }) => {
+export const TodoScreen = ({ todo, goBack, onRemove, onSave }: ITodoScreen) => {
+
+
+    const [modal, setModal] = useState(false)
+
+    const saveHandler = (title: string) => {
+        onSave(todo.id, title)
+        setModal(false)
+    }
+
     return (
         <View>
-            <AppCart>
-                <Text>
+            <EditModal
+                visible={modal}
+                value={todo.title}
+                onCancel={() => setModal(false)}
+                onSave={saveHandler} />
+
+            <AppCart style={styles.card}>
+                <Text style={styles.title}>
                     {todo.title}
                 </Text>
-                <Button title="Edit" />
+                <Button title="Edit" onPress={() => setModal(true)} />
             </AppCart>
             <View style={styles.buttonsBlock}>
                 <View style={styles.button}>
@@ -29,6 +47,7 @@ export const TodoScreen: FC<ITodoScreen> = ({ goBack, todo }) => {
 
                     <Button title="Remove"
                         color={THEME.DANGER_COLOR}
+                        onPress={() => onRemove(todo.id)}
                     />
                 </View>
             </View>
@@ -37,7 +56,7 @@ export const TodoScreen: FC<ITodoScreen> = ({ goBack, todo }) => {
 }
 
 const styles = StyleSheet.create({
-    
+
     buttonsBlock: {
         flexDirection: "row",
         justifyContent: "space-around",
@@ -45,5 +64,12 @@ const styles = StyleSheet.create({
     },
     button: {
         width: '40%'
+    },
+    title: {
+        fontSize: 20
+    },
+    card: {
+        marginBottom: 20,
+        padding: 15
     }
 })
