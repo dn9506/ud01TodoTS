@@ -9,7 +9,7 @@ export const TodoState = ({ children }: React.PropsWithChildren) => {
             { id: '1', title: 'Second todo' }]
     }
 
-    const [state, dispath] = useReducer(todoReducer, { initialState})
+    const [state, dispath] = useReducer(todoReducer, initialState)
 
     return (<TodoContext.Provider value={{
         todos: state.todos
