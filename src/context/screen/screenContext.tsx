@@ -1,3 +1,5 @@
 import React from 'react'
 
-export const ScreenContext = React.createContext()
+type TypeScreenContext = string | null
+
+export const ScreenContext = React.createContext<TypeScreenContext>(null)

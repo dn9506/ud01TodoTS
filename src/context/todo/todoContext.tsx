@@ -1,3 +1,8 @@
 import { createContext } from 'react'
 
-export const TodoContext = createContext()
+interface ITodoContext {
+	id: string
+	title: string
+}
+
+export const TodoContext = createContext<ITodoContext[] | null>(null)
