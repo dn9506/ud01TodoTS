@@ -1,7 +1,8 @@
-import React, { FC, useContext } from 'react'
+import React, { FC, useCallback, useContext, useEffect } from 'react'
 import { FlatList, Image, StyleSheet, View } from 'react-native'
 import { AddTodo } from '../components/AddTodo'
 import { Todo } from '../components/Todo'
+import { AppLoader } from '../components/ui/AppLoader'
 import { ScreenContext } from '../context/screen/screenContext'
 import { TodoContext } from '../context/todo/todoContext'
 
@@ -16,8 +17,19 @@ interface IMainScreen {
 }
 
 export const MainScreen: FC = () => {
-	const { addTodo, removeTodo, todos } = useContext(TodoContext)
+	const { addTodo, removeTodo, todos, fetchTodos, loading, error } =
+		useContext(TodoContext)
 	const { changeScreen } = useContext(ScreenContext)
+
+	const loadTodos = useCallback(async () => await fetchTodos(), [fetchTodos])
+	useEffect(() => {
+		loadTodos()
+	}, [])
+
+	if (loading) {
+		return <AppLoader />
+	}
+
 	let content = (
 		<FlatList
 			style={styles.flatListContainer}
