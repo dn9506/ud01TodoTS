@@ -1,5 +1,4 @@
 import React from 'react'
+import { ScreenContextType } from '../types'
 
-type TypeScreenContext = string | null
-
-export const ScreenContext = React.createContext<TypeScreenContext>(null)
+export const ScreenContext = React.createContext<ScreenContextType | null>(null)

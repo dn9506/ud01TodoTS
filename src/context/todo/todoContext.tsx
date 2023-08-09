@@ -1,8 +1,4 @@
 import { createContext } from 'react'
+import { TodoContextType } from '../types'
 
-interface ITodoContext {
-	id: string
-	title: string
-}
-
-export const TodoContext = createContext<ITodoContext[] | null>(null)
+export const TodoContext = createContext<TodoContextType | null>(null)

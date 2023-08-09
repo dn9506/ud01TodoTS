@@ -4,21 +4,19 @@ import { EditModal } from '../components/EditModal'
 import { AppCart } from '../components/ui/AppCard'
 import { ScreenContext } from '../context/screen/screenContext'
 import { TodoContext } from '../context/todo/todoContext'
+import { ScreenContextType, TodoContextType } from '../context/types'
 import { THEME } from '../theme'
 
-interface ITodoScreen {
-	todo: { id: string; title: string }
-	goBack: () => void
-	onRemove: (id: string) => void
-	onSave: (id: string, title: string) => void
-}
-
 export const TodoScreen = () => {
-	const { todos, updateTodo, removeTodo } = useContext(TodoContext)
-	const { todoId, changeScreen } = useContext(ScreenContext)
+	const { todos, updateTodo, removeTodo } = useContext(
+		TodoContext
+	) as TodoContextType
+	const { todoId, changeScreen } = useContext(
+		ScreenContext
+	) as ScreenContextType
 	const [modal, setModal] = useState(false)
 
-	const todo = todo.find(t => t.id === todoId)
+	const todo = todos.find(t => t.id === todoId)!
 
 	const saveHandler = (title: string) => {
 		updateTodo(todo.id, title)

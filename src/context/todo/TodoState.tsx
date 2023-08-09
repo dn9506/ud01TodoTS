@@ -1,14 +1,16 @@
 import React, { useContext, useReducer } from 'react'
 import { Alert } from 'react-native'
+import { Http } from '../../http'
 import { ScreenContext } from '../screen/screenContext'
 import {
 	ADD_TODO,
-	CLEAN_ERROR,
+	CLEAR_ERROR,
 	FETCH_TODOS,
 	HIDE_LOADER,
 	REMOVE_TODO,
 	SHOW_ERROR,
 	SHOW_LOADER,
+	ScreenContextType,
 	UPDATE_TODO,
 } from '../types'
 import { TodoContext } from './todoContext'
@@ -20,89 +22,85 @@ export const TodoState = ({ children }: React.PropsWithChildren) => {
 		loading: false,
 		error: null,
 	}
-
-	const { changeScreen } = useContext(ScreenContext)
+	const { changeScreen } = useContext(ScreenContext) as ScreenContextType
 	const [state, dispatch] = useReducer(todoReducer, initialState)
 
 	const addTodo = async (title: string) => {
-		const response = await fetch(
-			'https://ud1todo-default-rtdb.europe-west1.firebasedatabase.app/todos.json',
-			{
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ title }),
-			}
-		)
-		const data = await response.json()
-		// check in console
-		console.log(data)
-		dispatch({ type: ADD_TODO, title })
+		clearError()
+		try {
+			const data = await Http.post(
+				'https://ud1todo-default-rtdb.europe-west1.firebasedatabase.app/todos.json',
+				{ title }
+			)
+			dispatch({ type: ADD_TODO, title, id: data.name })
+		} catch (e) {
+			showError('Что-то пошло не так')
+		}
 	}
-	const removeTodo = id => {
-		const todo = state.todos.find(t => t.id === id)
+
+	const removeTodo = (id: string) => {
+		const todo = state.todos.find(elem => elem.id === id)
 		Alert.alert(
-			'Remove element',
-			`Are you sure, want delete this element: "${todo.title}"?`,
+			'Удаление элемента',
+			`Вы уверены, что хотите удалить "${todo.title}"?`,
 			[
 				{
-					text: 'Cancel',
+					text: 'Отмена',
 					style: 'cancel',
 				},
 				{
-					text: 'Remove',
+					text: 'Удалить',
 					style: 'destructive',
 					onPress: async () => {
 						changeScreen(null)
-						await fetch(
-							`https://ud1todo-default-rtdb.europe-west1.firebasedatabase.app/todos/${id}.json`,
-							{
-								method: 'DELETE',
-								headers: { 'Content-Type': 'application/json' },
-							}
+						await Http.delete(
+							`https://ud1todo-default-rtdb.europe-west1.firebasedatabase.app/todos/${id}.json`
 						)
 						dispatch({ type: REMOVE_TODO, id })
 					},
 				},
-			]
+			],
+			{ cancelable: false }
 		)
 	}
 
 	const fetchTodos = async () => {
 		showLoader()
-		const response = await fetch(
-			'https://ud1todo-default-rtdb.europe-west1.firebasedatabase.app/todos.json',
-			{
-				method: 'GET',
-				headers: { 'Content-Type': 'application/json' },
-			}
-		)
-		const data = await response.json()
-		// check in console
-		console.log('fetch Data', data)
-		const todos = Object.keys(data).map(key => ({ id: key, ...data[key] }))
-		dispatch({ type: FETCH_TODOS, todos })
-		hideLoader()
+		clearError()
+		try {
+			const data = await Http.get(
+				'https://ud1todo-default-rtdb.europe-west1.firebasedatabase.app/todos.json'
+			)
+			const todos = Object.keys(data).map(key => ({ ...data[key], id: key }))
+			dispatch({ type: FETCH_TODOS, todos })
+		} catch (e) {
+			showError('Что-пошло не так...')
+			console.log(e)
+		} finally {
+			hideLoader()
+		}
 	}
 
 	const updateTodo = async (id: string, title: string) => {
-		await fetch(
-			`https://ud1todo-default-rtdb.europe-west1.firebasedatabase.app/todos/${id}.json`,
-			{
-				method: 'PATCH',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ title }),
-			}
-		)
-		dispatch({ type: UPDATE_TODO, id, title })
+		clearError()
+		try {
+			await Http.patch(
+				`https://ud1todo-default-rtdb.europe-west1.firebasedatabase.app/todos/${id}.json`
+			)
+			dispatch({ type: UPDATE_TODO, id, title })
+		} catch (e) {
+			showError('Что-пошло не так...')
+			console.log(e)
+		}
 	}
 
 	const showLoader = () => dispatch({ type: SHOW_LOADER })
 
 	const hideLoader = () => dispatch({ type: HIDE_LOADER })
 
-	const showError = error => dispatch({ type: SHOW_ERROR, error })
+	const showError = (error: string) => dispatch({ type: SHOW_ERROR, error })
 
-	const clearError = () => dispatch({ type: CLEAN_ERROR })
+	const clearError = () => dispatch({ type: CLEAR_ERROR })
 
 	return (
 		<TodoContext.Provider

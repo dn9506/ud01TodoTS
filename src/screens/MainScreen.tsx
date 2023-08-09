@@ -1,25 +1,17 @@
-import React, { FC, useCallback, useContext, useEffect } from 'react'
+import React, { useCallback, useContext, useEffect } from 'react'
 import { FlatList, Image, StyleSheet, View } from 'react-native'
 import { AddTodo } from '../components/AddTodo'
 import { Todo } from '../components/Todo'
 import { AppLoader } from '../components/ui/AppLoader'
 import { ScreenContext } from '../context/screen/screenContext'
 import { TodoContext } from '../context/todo/todoContext'
+import { ScreenContextType, TodoContextType } from '../context/types'
 
-interface IMainScreen {
-	todos: {
-		id: string
-		title: string
-	}[]
-	addTodo: (elem: string) => void
-	removeTodo: (elem: string) => void
-	openTodo: (elemOpenId: string) => void
-}
-
-export const MainScreen: FC = () => {
-	const { addTodo, removeTodo, todos, fetchTodos, loading, error } =
-		useContext(TodoContext)
-	const { changeScreen } = useContext(ScreenContext)
+export const MainScreen = () => {
+	const { addTodo, removeTodo, todos, fetchTodos, loading, error } = useContext(
+		TodoContext
+	) as TodoContextType
+	const { changeScreen } = useContext(ScreenContext) as ScreenContextType
 
 	const loadTodos = useCallback(async () => await fetchTodos(), [fetchTodos])
 	useEffect(() => {
