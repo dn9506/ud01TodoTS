@@ -2,12 +2,13 @@ import React, { useContext } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Navbar } from './components/Navbar'
 import { ScreenContext } from './context/screen/screenContext'
+import { ScreenContextType } from './context/types'
 import { MainScreen } from './screens/MainScreen'
 import { TodoScreen } from './screens/TodoScreen'
 import { THEME } from './theme'
 
 export const MainLayout = () => {
-	const { todoId } = useContext(ScreenContext)
+	const { todoId } = useContext(ScreenContext) as ScreenContextType
 
 	return (
 		<View style={styles.wrapper}>

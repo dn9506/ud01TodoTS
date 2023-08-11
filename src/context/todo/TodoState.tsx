@@ -7,6 +7,7 @@ import {
 	CLEAR_ERROR,
 	FETCH_TODOS,
 	HIDE_LOADER,
+	ITodo,
 	REMOVE_TODO,
 	SHOW_ERROR,
 	SHOW_LOADER,
@@ -39,7 +40,7 @@ export const TodoState = ({ children }: React.PropsWithChildren) => {
 	}
 
 	const removeTodo = (id: string) => {
-		const todo = state.todos.find(elem => elem.id === id)
+		const todo = state.todos.find((elem: ITodo) => elem.id === id)
 		Alert.alert(
 			'Удаление элемента',
 			`Вы уверены, что хотите удалить "${todo.title}"?`,
