@@ -8,6 +8,10 @@ export const SHOW_LOADER = 'SHOW_LOADER'
 export const HIDE_LOADER = 'HIDE_LOADER'
 export const SHOW_ERROR = 'SHOW_ERROR'
 export const CLEAR_ERROR = 'CLEAR_ERROR'
+enum countActionTodo {}
+export interface ITodoReducer {}
+
+export interface IScreenReducer {}
 
 //context
 export interface ITodo {
