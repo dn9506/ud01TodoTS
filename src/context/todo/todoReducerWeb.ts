@@ -1,20 +1,25 @@
-import React, { useContext, useReducer } from 'react'
-import { Alert } from 'react-native'
 import { LINK } from '../../http/dbLink'
-import { Http } from '../../http/http'
-import { ScreenContext } from '../screen/screenContext'
-import { ITodoReducerState, ScreenContextType, countActionTodo } from '../types'
-import { TodoContext } from './todoContext'
-import { todoReducer } from './todoReducerLocal'
+import {
+	ITodoReducerAction,
+	ITodoReducerState,
+	countActionTodo,
+} from '../types'
 
-export const TodoState = ({ children }: React.PropsWithChildren) => {
-	const initialState: ITodoReducerState = {
-		todos: [],
-		loading: false,
-		error: null,
+export const todoReducerWeb = (
+	state: ITodoReducerState,
+	action: ITodoReducerAction
+) => {
+	switch (action.type) {
+		case countActionTodo.ADD_TODO: {
+			clearError()
+			try {
+				const data = await Http.post(`${LINK}/todos.json`, { title })
+				dispatch({ type: countActionTodo.ADD_TODO, title, id: data.name })
+			} catch (e) {
+				showError('Что-то пошло не так')
+			}
+		}
 	}
-	const { changeScreen } = useContext(ScreenContext) as ScreenContextType
-	const [state, dispatch] = useReducer(todoReducer, initialState)
 
 	const addTodo = async (title: string) => {
 		clearError()
@@ -75,29 +80,4 @@ export const TodoState = ({ children }: React.PropsWithChildren) => {
 			console.log(e)
 		}
 	}
-
-	const showLoader = () => dispatch({ type: countActionTodo.SHOW_LOADER })
-
-	const hideLoader = () => dispatch({ type: countActionTodo.HIDE_LOADER })
-
-	const showError = (error: string) =>
-		dispatch({ type: countActionTodo.SHOW_ERROR, error })
-
-	const clearError = () => dispatch({ type: countActionTodo.CLEAR_ERROR })
-
-	return (
-		<TodoContext.Provider
-			value={{
-				todos: state.todos,
-				loading: state.loading,
-				error: state.error,
-				addTodo,
-				removeTodo,
-				updateTodo,
-				fetchTodos,
-			}}
-		>
-			{children}
-		</TodoContext.Provider>
-	)
 }

@@ -8,8 +8,29 @@
 // export const HIDE_LOADER = 'HIDE_LOADER'
 // export const SHOW_ERROR = 'SHOW_ERROR'
 // export const CLEAR_ERROR = 'CLEAR_ERROR'
-enum countActionTodo {}
-export interface ITodoReducer {}
+export enum countActionTodo {
+	ADD_TODO = 'ADD_TODO',
+	UPDATE_TODO = 'UPDATE_TODO',
+	REMOVE_TODO = 'REMOVE_TODO',
+	FETCH_TODOS = 'FETCH_TODOS',
+	SHOW_LOADER = 'SHOW_LOADER',
+	HIDE_LOADER = 'HIDE_LOADER',
+	SHOW_ERROR = 'SHOW_ERROR',
+	CLEAR_ERROR = 'CLEAR_ERROR',
+}
+export enum countActionScreen {
+	CHANGE_SCREEN = 'CHANGE_SCREEN',
+}
+
+export interface ITodoReducerState {
+	todos: ITodo[]
+	loading: boolean
+	error: TypeError | null
+}
+export interface ITodoReducerAction {
+	type: countActionTodo
+}
+export interface IScreenReducerAction {}
 
 export interface IScreenReducer {}
 
