@@ -3,18 +3,17 @@ import { Alert } from 'react-native'
 import { LINK } from '../../http/dbLink'
 import { Http } from '../../http/http'
 import { ScreenContext } from '../screen/screenContext'
-import { ITodoReducerState, ScreenContextType, countActionTodo } from '../types'
+import { ITodo, ScreenContextType, countActionTodo } from '../types'
 import { TodoContext } from './todoContext'
-import { todoReducer } from './todoReducerLocal'
+import { todoReducer } from './todoReducer'
 
 export const TodoState = ({ children }: React.PropsWithChildren) => {
-	const initialState: ITodoReducerState = {
+	const { changeScreen } = useContext(ScreenContext) as ScreenContextType
+	const [state, dispatch] = useReducer(todoReducer, {
 		todos: [],
 		loading: false,
 		error: null,
-	}
-	const { changeScreen } = useContext(ScreenContext) as ScreenContextType
-	const [state, dispatch] = useReducer(todoReducer, initialState)
+	})
 
 	const addTodo = async (title: string) => {
 		clearError()
@@ -27,10 +26,10 @@ export const TodoState = ({ children }: React.PropsWithChildren) => {
 	}
 
 	const removeTodo = (id: string) => {
-		const todo = state.todos.find(elem => elem.id === id)
+		const todo = state.todos.find((elem: ITodo) => elem.id === id)
 		Alert.alert(
 			'Удаление элемента',
-			`Вы уверены, что хотите удалить "${todo.title}"?`,
+			`Вы уверены, что хотите удалить "${todo!.title}"?`,
 			[
 				{
 					text: 'Отмена',
@@ -68,7 +67,7 @@ export const TodoState = ({ children }: React.PropsWithChildren) => {
 	const updateTodo = async (id: string, title: string) => {
 		clearError()
 		try {
-			await Http.patch(`${LINK}/todos/${id}.json`)
+			await Http.patch(`${LINK}/todos/${id}.json`, { title })
 			dispatch({ type: countActionTodo.UPDATE_TODO, id, title })
 		} catch (e) {
 			showError('Что-пошло не так...')
@@ -76,14 +75,21 @@ export const TodoState = ({ children }: React.PropsWithChildren) => {
 		}
 	}
 
-	const showLoader = () => dispatch({ type: countActionTodo.SHOW_LOADER })
+	const showLoader = () => {
+		dispatch({ type: countActionTodo.SHOW_LOADER })
+	}
 
-	const hideLoader = () => dispatch({ type: countActionTodo.HIDE_LOADER })
+	const hideLoader = () => {
+		dispatch({ type: countActionTodo.HIDE_LOADER })
+	}
 
-	const showError = (error: string) =>
+	const showError = (error: string) => {
 		dispatch({ type: countActionTodo.SHOW_ERROR, error })
+	}
 
-	const clearError = () => dispatch({ type: countActionTodo.CLEAR_ERROR })
+	const clearError = () => {
+		dispatch({ type: countActionTodo.CLEAR_ERROR })
+	}
 
 	return (
 		<TodoContext.Provider

@@ -1,3 +1,8 @@
+type TypeConfig = {
+	method: string
+	headers: { 'Content-Type': string }
+	body?: string
+}
 export class Http {
 	static HEADERS = { 'Content-Type': 'application/json' }
 
@@ -36,13 +41,16 @@ export class Http {
 }
 
 async function request(url: string, method = 'GET', data?: {}) {
-	const config = {
+	let config: TypeConfig = {
 		method,
 		headers: Http.HEADERS,
 	}
 
 	if (method === 'POST' || method === 'PATCH') {
-		config.body = JSON.stringify(data)
+		config = {
+			...config,
+			body: JSON.stringify(data),
+		}
 	}
 
 	const response = await fetch(url, config)

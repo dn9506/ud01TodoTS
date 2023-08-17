@@ -1,13 +1,13 @@
-import React, { useReducer } from 'react'
-import { CHANGE_SCREEN } from '../types'
+import React, { useState } from 'react'
 import { ScreenContext } from './screenContext'
-import { screenReducer } from './screenReducer'
 
 export const ScreenState = ({ children }: React.PropsWithChildren) => {
-	const [state, dispatch] = useReducer(screenReducer, null)
+	//const [state, dispatch] = useReducer(screenReducer, null)
 
-	const changeScreen = (id: string | null) =>
-		dispatch({ type: CHANGE_SCREEN, payload: id })
+	const [state, setState] = useState<string | null>(null)
+
+	const changeScreen = (id: string | null) => setState(id)
+	// dispatch({ type: countActionScreen.CHANGE_SCREEN, payload: id })
 
 	return (
 		<ScreenContext.Provider

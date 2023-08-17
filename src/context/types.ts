@@ -25,14 +25,25 @@ export enum countActionScreen {
 export interface ITodoReducerState {
 	todos: ITodo[]
 	loading: boolean
-	error: TypeError | null
+	error: string | null
 }
 export interface ITodoReducerAction {
 	type: countActionTodo
 }
-export interface IScreenReducerAction {}
+export type TypeTodoReducerAction =
+	| { type: countActionTodo.ADD_TODO; title: string; id: string }
+	| { type: countActionTodo.CLEAR_ERROR }
+	| { type: countActionTodo.FETCH_TODOS; todos: ITodo[] }
+	| { type: countActionTodo.HIDE_LOADER }
+	| { type: countActionTodo.REMOVE_TODO; id: string }
+	| { type: countActionTodo.SHOW_ERROR; error: null | string }
+	| { type: countActionTodo.SHOW_LOADER }
+	| { type: countActionTodo.UPDATE_TODO; id: string; title: string }
 
-export interface IScreenReducer {}
+export type TScreenReducerAction = {
+	type: countActionScreen.CHANGE_SCREEN
+	payload: string | null
+}
 
 //context
 export interface ITodo {
@@ -42,7 +53,7 @@ export interface ITodo {
 export type TodoContextType = {
 	todos: ITodo[]
 	loading: boolean
-	error: TypeError
+	error: string | null
 	addTodo: (title: string) => void
 	removeTodo: (id: string) => void
 	updateTodo: (id: string, title: string) => void

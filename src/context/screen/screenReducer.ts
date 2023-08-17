@@ -1,11 +1,17 @@
-import { CHANGE_SCREEN } from '../types'
+import { TScreenReducerAction, countActionScreen } from '../types'
 
-const handlers = {
-	[CHANGE_SCREEN]: (state, payload) => payload,
-	DEFAULT: state => state,
-}
-
-export const screenReducer = (state, action) => {
-	const handler = handlers[action.type] || handlers.DEFAULT
-	return handler(state, action.payload)
+export const screenReducer = (
+	state: string | null,
+	action: TScreenReducerAction
+) => {
+	switch (action.type) {
+		case countActionScreen.CHANGE_SCREEN: {
+			return {
+				state: action.payload,
+			}
+		}
+		default: {
+			return state
+		}
+	}
 }
